@@ -287,6 +287,6 @@ void adcMultiStartConversion(
   ADCD3.adc->CR1   = grpp3->cr1 | ADC_CR1_OVRIE | ADC_CR1_SCAN;
   ADCD3.adc->CR2   = grpp3->cr2 | ADC_CR2_CONT  | ADC_CR2_ADON;
 
-  adcStartConversionI(&ADCD1, grpp1, samples, depth * 3);
+  adcMultiStartConversionI(&ADCD1, grpp1, samples, depth * 3);
   chSysUnlock();
 }
