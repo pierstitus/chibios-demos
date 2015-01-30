@@ -2,6 +2,8 @@
 #include "ch.h"
 #include "hal.h"
 
+#include "adc_multi.h"
+
 /**
  * @brief   ADC DMA ISR service routine.
  *
@@ -258,7 +260,8 @@ void adcMultiStartConversion(
 
   chSysLock();
   // Multi-DMA mode tuning
-  ADC->CCR |= ADC_CCR_DMA_0 | ADC_CCR_DDS | (ADC_CCR_MULTI & 0b10110);
+  ADC->CCR |= ADC_CCR_DMA_0 | ADC_CCR_DDS \
+              | (ADC_CCR_MULTI_TRIPLE | ADC_CCR_MULTI_REGULAR_SIMUL);
   // DMA Mode 1
   // Triple mode: ADC1, 2 and 3 working together
   // 10110: Regular simultaneous mode only
@@ -287,6 +290,8 @@ void adcMultiStartConversion(
   ADCD3.adc->CR1   = grpp3->cr1 | ADC_CR1_OVRIE | ADC_CR1_SCAN;
   ADCD3.adc->CR2   = grpp3->cr2 | ADC_CR2_CONT  | ADC_CR2_ADON;
 
-  adcMultiStartConversionI(&ADCD1, grpp1, samples, depth * 3);
+  // depth * 4 because there are 4 DMA transfers each 3 ADC conversions,
+  // otherwise should be depth * 3
+  adcMultiStartConversionI(&ADCD1, grpp1, samples, depth * 4);
   chSysUnlock();
 }

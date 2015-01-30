@@ -26,15 +26,20 @@ BaseSequentialStream *chp = (BaseSequentialStream *)&SDU1;
 
 #include "adc_multi.h"
 
+/* Number of ADCs used in multi ADC mode (2 or 3) */
+#define ADC_N_ADCS 3
+/* Per cycle there is one DMA request too much, which gives one double value.
+ * hardware bug? */
+#define ADC_N_ADCS_FIX (ADC_N_ADCS+1)
+
 /* Total number of channels to be sampled by a single ADC operation.*/
-#define ADC_GRP1_NUM_CHANNELS   3
 #define ADC_GRP1_NUM_CHANNELS_PER_ADC   1
+#define ADC_GRP1_NUM_CHANNELS   (ADC_GRP1_NUM_CHANNELS_PER_ADC*ADC_N_ADCS_FIX)
 
 /* Depth of the conversion buffer, channels are sampled one time each.*/
 #define ADC_GRP1_BUF_DEPTH      4 // must be 1 or even
 
-
-static adcsample_t samples[ADC_GRP1_NUM_CHANNELS * ADC_GRP1_BUF_DEPTH];
+static adcsample_t samples[ADC_GRP1_NUM_CHANNELS_PER_ADC * ADC_N_ADCS_FIX * ADC_GRP1_BUF_DEPTH];
 
 /*
  * ADC streaming callback.
