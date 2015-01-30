@@ -28,18 +28,14 @@ BaseSequentialStream *chp = (BaseSequentialStream *)&SDU1;
 
 /* Number of ADCs used in multi ADC mode (2 or 3) */
 #define ADC_N_ADCS 3
-/* Per cycle there is one DMA request too much, which gives one double value.
- * hardware bug? */
-#define ADC_N_ADCS_FIX (ADC_N_ADCS+1)
 
 /* Total number of channels to be sampled by a single ADC operation.*/
-#define ADC_GRP1_NUM_CHANNELS_PER_ADC   1
-#define ADC_GRP1_NUM_CHANNELS   (ADC_GRP1_NUM_CHANNELS_PER_ADC*ADC_N_ADCS_FIX)
+#define ADC_GRP1_NUM_CHANNELS_PER_ADC   2
 
 /* Depth of the conversion buffer, channels are sampled one time each.*/
-#define ADC_GRP1_BUF_DEPTH      (4*ADC_N_ADCS_FIX) // must be 1 or even
+#define ADC_GRP1_BUF_DEPTH      (4*ADC_N_ADCS) // must be 1 or even
 
-static adcsample_t samples[ADC_GRP1_NUM_CHANNELS_PER_ADC * ADC_N_ADCS_FIX * ADC_GRP1_BUF_DEPTH];
+static adcsample_t samples[ADC_GRP1_NUM_CHANNELS_PER_ADC * ADC_N_ADCS * ADC_GRP1_BUF_DEPTH];
 
 /*
  * ADC streaming callback.
@@ -207,12 +203,11 @@ int main(void) {
    */
   adcMultiStartConversion(&adcgrpcfg1, &adcgrpcfg2, &adcgrpcfg3, samples, ADC_GRP1_BUF_DEPTH);
 
-
   /*
    * Normal main() thread activity, write outh adc samples over USB serial.
    */
   while (TRUE) {
-    //chThdSleepMilliseconds(1);
+    chThdSleepMilliseconds(1);
     chprintf(chp, "\r\n%8u: ", nx);
     for (n = 0; n < ADC_GRP1_NUM_CHANNELS_PER_ADC * ADC_GRP1_BUF_DEPTH; n++) {
       chprintf(chp, "%4u, ", samples[n]);
