@@ -37,7 +37,7 @@ BaseSequentialStream *chp = (BaseSequentialStream *)&SDU1;
 #define ADC_GRP1_NUM_CHANNELS   (ADC_GRP1_NUM_CHANNELS_PER_ADC*ADC_N_ADCS_FIX)
 
 /* Depth of the conversion buffer, channels are sampled one time each.*/
-#define ADC_GRP1_BUF_DEPTH      4 // must be 1 or even
+#define ADC_GRP1_BUF_DEPTH      (4*ADC_N_ADCS_FIX) // must be 1 or even
 
 static adcsample_t samples[ADC_GRP1_NUM_CHANNELS_PER_ADC * ADC_N_ADCS_FIX * ADC_GRP1_BUF_DEPTH];
 
@@ -214,7 +214,7 @@ int main(void) {
   while (TRUE) {
     //chThdSleepMilliseconds(1);
     chprintf(chp, "\r\n%8u: ", nx);
-    for (n = 0; n < ADC_GRP1_NUM_CHANNELS * ADC_GRP1_BUF_DEPTH; n++) {
+    for (n = 0; n < ADC_GRP1_NUM_CHANNELS_PER_ADC * ADC_GRP1_BUF_DEPTH; n++) {
       chprintf(chp, "%4u, ", samples[n]);
     }
   }

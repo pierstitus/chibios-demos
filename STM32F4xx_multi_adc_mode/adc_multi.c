@@ -290,8 +290,6 @@ void adcMultiStartConversion(
   ADCD3.adc->CR1   = grpp3->cr1 | ADC_CR1_OVRIE | ADC_CR1_SCAN;
   ADCD3.adc->CR2   = grpp3->cr2 | ADC_CR2_CONT  | ADC_CR2_ADON;
 
-  // depth * 4 because there are 4 DMA transfers each 3 ADC conversions,
-  // otherwise should be depth * 3
-  adcMultiStartConversionI(&ADCD1, grpp1, samples, depth * 4);
+  adcMultiStartConversionI(&ADCD1, grpp1, samples, depth);
   chSysUnlock();
 }
