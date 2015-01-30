@@ -112,7 +112,7 @@ static const ADCConversionGroup adcgrpcfg2 = {
 /*
  * ADC conversion group for ADC3.
  * Mode:        triple ADC mode slave.
- * Channels:    PA1, PC0
+ * Channels:    PA2, PC1
  */
 static const ADCConversionGroup adcgrpcfg3 = {
   TRUE,
@@ -186,7 +186,7 @@ int main(void) {
   palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOC, 0, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOC, 2, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 1, PAL_MODE_INPUT_ANALOG);
 
   /*
    * Creates the blinker thread.
